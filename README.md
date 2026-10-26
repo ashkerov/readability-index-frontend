@@ -1,75 +1,74 @@
-# React + TypeScript + Vite
+# Фронтенд приложения для расчета индекса читабельности
+**Лабораторная работа №5** (Разработка базового SPA на React)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Базовое SPA-приложение на React + TypeScript (сборщик Vite). Интерфейс выполнен в виде мобильного приложения (колонка шириной 450px по центру экрана). 
+На данном этапе (ЛР5) приложение работает **только с mock-данными** (без подключения к бэкенду и базе данных).
 
-Currently, two official plugins are available:
+## Стек технологий
+- React (функциональные компоненты, хуки)
+- TypeScript (строгая типизация)
+- Vite (сборщик и dev-сервер)
+- React Router DOM v6 (маршрутизация)
+- React-Bootstrap (UI-компоненты)
+- React-Bootstrap-Icons (иконки)
+- Чистый CSS
+- Redux и React Context в данной работе не используются.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Запуск проекта
+1. Установите зависимости: npm install
+2. Запустите сервер разработки (порт 3000): npm run dev
+3. Откройте в браузере: http://localhost:3000/
 
-## React Compiler
+## Структура проекта
+- src/types/publication.ts — интерфейс Publication (поля соответствуют бэкенду)
+- src/data/mockData.ts — массив из 4 mock-публикаций
+- src/utils/media.ts — логика fallback для медиа (изображение по умолчанию)
+- src/routes.ts — константы маршрутов
+- src/components/ — переиспользуемые компоненты (AppLayout, TabBar, SearchBar, PublicationCard, FeedMedia)
+- src/pages/ — страницы приложения (FeedPage, GridPage, AddPage, LoginPage)
+- src/styles/index.css — глобальные стили
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Описание страниц приложения (Поля и Кнопки)
 
-## Expanding the ESLint configuration
+Нижняя панель навигации (TabBar) содержит 4 пункта. На данном этапе работают только два из них: «Лента» и «Плитка». Вкладки «Добавление» и «Вход» являются неактивными заглушками.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 1. Страница «Лента» (маршрут / и /feed/:id)
+Вертикальный полноэкранный скролл (формат TikTok).
+- **Элементы отображения:** Видео (или картинка) на фоне, Название текста, Текст описания, Параметры (Средняя длина, Доля уникальных слов).
+- **Поля:** Отсутствуют поля ввода.
+- **Кнопки:**
+  - Развернуть / Свернуть — текстовая кнопка для показа полного описания.
+  - Сердечко (Лайк) — кнопка-иконка для постановки лайка.
+  - Далее — кнопка-иконка для перехода к следующей карточке.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### 2. Страница «Плитка» (маршрут /grid)
+Сетка карточек в 2 колонки.
+- **Элементы отображения:** Карточки с изображениями, названием, бейджем жанра и счетчиком лайков.
+- **Поля:**
+  - Input (текстовое поле) — для ввода жанра (плейсхолдер: "Жанр (например, Научный)").
+- **Кнопки:**
+  - Поиск — кнопка с иконкой лупы для применения фильтрации по жанру.
+  - Клик по карточке — вся карточка является кликабельной ссылкой (переход в Ленту).
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### 3. Страница «Добавление» (маршрут /add) — Заглушка
+Вкладка неактивна в меню, но страница существует в роутере.
+- **Элементы отображения:** Блок «Медиафайлы», Блок «Информация о тексте».
+- **Поля ввода (нефункциональные):**
+  - Название (input).
+  - Жанр (input).
+  - Средняя длина (input).
+  - Доля уникальных слов (input).
+  - Описание (textarea).
+- **Кнопки:**
+  - Создать (Демо) — черная кнопка (при нажатии выводит alert "В разработке").
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 4. Страница «Вход» (маршрут /login) — Заглушка
+Вкладка неактивна в меню.
+- **Элементы отображения:** Текст «Раздел в разработке».
+- **Поля:** Отсутствуют.
+- **Кнопки:**
+  - На главную — черная кнопка для возврата на страницу Ленты.
 
-```
-
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
+## Медиафайлы и заглушки
+Все изображения и видео хранятся локально в папке public/media/.
+Если в данных image_url или video_url пустые (или файл не загрузился), срабатывает защита (fallback): вместо видео показывается картинка, а вместо отсутствующей картинки — SVG-заглушка «No Image».
